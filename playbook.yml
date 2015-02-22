@@ -4,4 +4,4 @@
     - name: Install sudo
       apt: pkg=sudo state=present
     - name: Add /etc/sudoers.d/99_{{ user }}
-      template: src=sudoers.d dest=/etc/sudoers.d/99_{{ user }}
+      template: src=templates/sudoers.d dest=/etc/sudoers.d/99_{{ user }}
