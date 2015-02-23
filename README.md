@@ -3,9 +3,10 @@
 Enable sudo on Debian machine
 
 ## Steps:
-1) SSH to your server
-2) Set root password using `passwd`
-3) Create `{{ user }}` using `adduser`
-4) Create `hosts` file for your machine
-5) Define `{{ user }}` in file in `host_vars` directory
-  - If you don't know how to do `5)` & `6)` you can see examples
+1) Modify `hosts`
+2) Modify `host_vars/`
+3) Run `ansible-playbook -i hosts playbook.yml`
+
+## Password
+1) Run `sudo pip install passlib`
+2) Run `python -c "from passlib.hash import sha512_crypt; import getpass; print sha512_crypt.encrypt(getpass.getpass())"`

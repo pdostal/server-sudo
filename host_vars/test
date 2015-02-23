@@ -1,1 +1,5 @@
 user: pavel
+user_pass: '$6$rounds=100000$2IH6/LBxtWEaIhhR$NBNORGPXEsckm1mkOdfdqPmVcBtd4XcI45exX5LL0sw/utqvWWlmPa3733bi7tZfvPfWU7m3La8yah2IuJy2F0'
+root_pass: '$6$rounds=100000$2IH6/LBxtWEaIhhR$NBNORGPXEsckm1mkOdfdqPmVcBtd4XcI45exX5LL0sw/utqvWWlmPa3733bi7tZfvPfWU7m3La8yah2IuJy2F0'
+my_ssh_key: /Users/pavel/.ssh/id_ecdsa.pub
+

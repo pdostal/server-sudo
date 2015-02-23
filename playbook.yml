@@ -1,7 +1,13 @@
 - name: SUDO
   hosts: all
   tasks:
+    - name: Change root password
+      user: name=root password={{ root_pass }}
     - name: Install sudo
       apt: pkg=sudo state=present
+    - name: Add user {{ user }}
+      user: name={{ user }} password={{ user_pass }} shell=/bin/bash
+    - name: Add user {{ user }}
+      authorized_key: user={{ user }} key="{{ lookup('file', my_ssh_key) }}"
     - name: Add /etc/sudoers.d/99_{{ user }}
       template: src=templates/sudoers.d dest=/etc/sudoers.d/99_{{ user }}
