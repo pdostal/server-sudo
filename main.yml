@@ -1,5 +1,6 @@
 - name: sudo
   hosts: all
+  sudo: yes
   vars:
     my_ssh_key: /Users/pavel/.ssh/id_ecdsa.pub
     user: pavel
@@ -8,5 +9,7 @@
     apt: pkg=sudo state=present
   - name: Add ssh key
     authorized_key: user={{ user }} key="{{ lookup('file', my_ssh_key) }}"
-  - name: Add sudoers.d file
-    template: src=templates/sudoers.d dest=/etc/sudoers.d/99_{{ user }}
+  - name: Modify sudoers
+    lineinfile: dest=/etc/sudoers regexp='^Defaults rootpw' line='Defaults rootpw'
+  - name: make a new user
+    user: name={{ user }} state=present groups="{{ user }},sudo"
