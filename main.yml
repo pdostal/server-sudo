@@ -1,0 +1,12 @@
+- name: sudo
+  hosts: all
+  vars:
+    my_ssh_key: /Users/pavel/.ssh/id_ecdsa.pub
+    user: pavel
+  tasks:
+  - name: Install sudo
+    apt: pkg=sudo state=present
+  - name: Add ssh key
+    authorized_key: user={{ user }} key="{{ lookup('file', my_ssh_key) }}"
+  - name: Add sudoers.d file
+    template: src=templates/sudoers.d dest=/etc/sudoers.d/99_{{ user }}

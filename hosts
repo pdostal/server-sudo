@@ -1,2 +1,2 @@
 [all]
-test  ansible_ssh_host=178.62.10.109 ansible_ssh_user=root
+sorrel ansible_ssh_user=root
