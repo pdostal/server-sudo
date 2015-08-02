@@ -9,6 +9,8 @@
     apt: pkg=sudo state=present
   - name: Add ssh key
     authorized_key: user={{ user }} key="{{ lookup('file', my_ssh_key) }}"
+  - name: Add sudo group to sudoers
+    lineinfile: dest=/etc/sudoers regexp='%sudo' line='%sudo ALL=(ALL:ALL) ALL'
   - name: Enable rootpw option in sudoers
     lineinfile: dest=/etc/sudoers regexp='rootpw' line='Defaults rootpw'
   - name: Ensure specified user is on sudo group
