@@ -5,11 +5,11 @@
     my_ssh_key: /Users/pavel/.ssh/id_ecdsa.pub
     user: pavel
   tasks:
-  - name: Install sudo
+  - name: Install/Upgrade sudo
     apt: pkg=sudo state=present
   - name: Add ssh key
     authorized_key: user={{ user }} key="{{ lookup('file', my_ssh_key) }}"
-  - name: Modify sudoers
-    lineinfile: dest=/etc/sudoers regexp='^Defaults rootpw' line='Defaults rootpw'
-  - name: make a new user
+  - name: Enable rootpw option in sudoers
+    lineinfile: dest=/etc/sudoers regexp='rootpw' line='Defaults rootpw'
+  - name: Ensure specified user is on sudo group
     user: name={{ user }} state=present groups="{{ user }},sudo"
