@@ -14,6 +14,9 @@
   - name: Install/Upgrade sudo (Debian)
     when: ansible_distribution == 'Debian'
     apt: pkg=sudo state=present
+  - name: Install/Upgrade sudo (FreeBSD)
+    when: ansible_system == 'FreeBSD'
+    pkgng: name=sudo state=present
   - name: Add ssh key
     authorized_key: user={{ user }} key="{{ lookup('file', my_ssh_key) }}"
   - name: Add sudo group to sudoers
