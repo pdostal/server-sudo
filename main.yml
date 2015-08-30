@@ -25,3 +25,8 @@
     lineinfile: dest={{ sudoers }} regexp='rootpw' line='Defaults rootpw'
   - name: Ensure specified user is on sudo group
     user: name={{ user }} state=present groups="{{ user }},sudo"
+  - name: Set env_keep variable without timestamp_timeout
+    lineinfile: dest={{ sudoers }} regexp=",timestamp_timeout" line='Defaults env_keep += "SSH_CLIENT SSH_CONNECTION SSH_TTY SSH_AUTH_SOCK"'
+  - name: Set default password timetout
+    lineinfile: dest={{ sudoers }} regexp="timestamp_timeout" line='Defaults timestamp_timeout = 15' backup=yes
+
