@@ -11,22 +11,25 @@
   - set_fact:
       sudoers: /etc/sudoers
     when: ansible_system == 'Linux'
+
   - name: Install/Upgrade sudo (Debian)
     when: ansible_distribution == 'Debian'
     apt: pkg=sudo state=present
   - name: Install/Upgrade sudo (FreeBSD)
     when: ansible_system == 'FreeBSD'
     pkgng: name=sudo state=present
+
   - name: Add ssh key
     authorized_key: user={{ user }} key="{{ lookup('file', my_ssh_key) }}"
+
   - name: Add sudo group to sudoers
     lineinfile: dest={{ sudoers }} regexp='%sudo' line='%sudo ALL=(ALL:ALL) ALL'
-  - name: Enable rootpw option in sudoers
-    lineinfile: dest={{ sudoers }} regexp='rootpw' line='Defaults rootpw'
   - name: Ensure specified user is on sudo group
     user: name={{ user }} state=present groups="{{ user }},sudo"
-  - name: Set env_keep variable without timestamp_timeout
-    lineinfile: dest={{ sudoers }} regexp=",timestamp_timeout" line='Defaults env_keep += "SSH_CLIENT SSH_CONNECTION SSH_TTY SSH_AUTH_SOCK"'
-  - name: Set default password timetout
-    lineinfile: dest={{ sudoers }} regexp="timestamp_timeout" line='Defaults timestamp_timeout = 15' backup=yes
 
+  - name: Set rootpw
+    lineinfile: dest={{ sudoers }} regexp='rootpw' line='Defaults rootpw'
+  - name: Set env_keep without timestamp_timeout
+    lineinfile: dest={{ sudoers }} regexp=",timestamp_timeout" line='Defaults env_keep += "SSH_CLIENT SSH_CONNECTION SSH_TTY SSH_AUTH_SOCK"'
+  - name: Set default password timetout to 15 mins
+    lineinfile: dest={{ sudoers }} regexp="timestamp_timeout" line='Defaults timestamp_timeout = 15' backup=yes
