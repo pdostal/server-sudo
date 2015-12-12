@@ -2,30 +2,32 @@
   hosts: all
   sudo: yes
   vars:
-    my_ssh_key: /Users/pavel/.ssh/id_ecdsa.pub
+    my_ssh_key: /Users/pavel/.ssh/id_rsa.pub
     user: pavel
   tasks:
   - set_fact:
       sudoers: /usr/local/etc/sudoers
+      sudogroup: wheel
     when: ansible_distribution == 'FreeBSD'
   - set_fact:
       sudoers: /etc/sudoers
-    when: ansible_system == 'Linux'
+      sudogroup: sudo
+    when: ansible_distribution == 'Debian'
 
   - name: Install/Upgrade sudo (Debian)
     when: ansible_distribution == 'Debian'
     apt: pkg=sudo state=present
   - name: Install/Upgrade sudo (FreeBSD)
-    when: ansible_system == 'FreeBSD'
+    when: ansible_distribution == 'FreeBSD'
     pkgng: name=sudo state=present
 
   - name: Add ssh key
     authorized_key: user={{ user }} key="{{ lookup('file', my_ssh_key) }}"
 
-  - name: Add sudo group to sudoers
-    lineinfile: dest={{ sudoers }} regexp='%sudo' line='%sudo ALL=(ALL:ALL) ALL'
+  - name: Add {{ sudogroup }} to sudoers
+    lineinfile: dest={{ sudoers }} regexp="%{{ sudogroup }}" line='%{{ sudogroup }} ALL=(ALL:ALL) ALL'
   - name: Ensure specified user is on sudo group
-    user: name={{ user }} state=present groups="{{ user }},sudo"
+    user: name={{ user }} state=present groups="{{ user }},{{ sudogroup }}"
 
   - name: Set rootpw
     lineinfile: dest={{ sudoers }} regexp='rootpw' line='Defaults rootpw'
@@ -36,3 +38,4 @@
 
   - name: Set periodic.conf (FreeBSD)
     template: src=templates/periodic.conf dest=/etc/periodic.conf
+    when: ansible_distribution == 'FreeBSD'
