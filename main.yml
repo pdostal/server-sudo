@@ -33,3 +33,6 @@
     lineinfile: dest={{ sudoers }} regexp=",timestamp_timeout" line='Defaults env_keep += "SSH_CLIENT SSH_CONNECTION SSH_TTY SSH_AUTH_SOCK"'
   - name: Set default password timetout to 15 mins
     lineinfile: dest={{ sudoers }} regexp="timestamp_timeout" line='Defaults timestamp_timeout = 15' backup=yes
+
+  - name: Set periodic.conf (FreeBSD)
+    template: src=templates/periodic.conf dest=/etc/periodic.conf
